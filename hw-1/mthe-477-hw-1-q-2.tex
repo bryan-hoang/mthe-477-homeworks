@@ -1,0 +1,107 @@
+% region Filename parsing.
+% Provides macros manipulating strings of tokens.
+\RequirePackage{xstring}
+
+% Store the jobname as a string with category 11 characters.
+\edef\normaljobname{\expandafter\scantokens\expandafter{\jobname\noexpand}}
+\StrBetween{\normaljobname}{hw-}{-q}[\homeworknumber]
+\StrBehind{\normaljobname}{-q-}[\questionnumber]
+% endregion
+
+\documentclass[
+  coursecode={MTHE 477},
+  assignmentname={Homework \homeworknumber},
+  studentnumber=20053722,
+  name={Bryan Hoang},
+  draft,
+  % final,
+]{
+  ltxanswer%
+}
+
+\usepackage{bch-style}
+
+\begin{document}
+  \begin{questions}
+    \setcounter{question}{\questionnumber}
+    \addtocounter{question}{-1}
+    \question[25]{}
+    \begin{solution}
+      \begin{claim}
+        \begin{equation*}
+          R(D) = \begin{cases}
+            1 - D, &0 \le D \le 1, \\
+            0,     &D \ge 1.
+          \end{cases}
+        \end{equation*}
+        \begin{proof}
+          Let \(0 \le D \le 1\). First, we will show that \(1 - D\) is the minimum achievable mutual information given the distortion constraint under the previous assumption. Assume that \(p(\hat{x}|x)\) satisfies the distortion constraint. For that to occur, we have
+          \begin{align*}
+            Ed(X,\hat{X}) &= \sum_{x\in\X} \sum_{\hat{x}\in\hat{\X}} \p{x} p(\hat{x}|x) d(x,\hat{x})                                               \\
+                          &= \sum_{\hat{x}\in\hat{\X}} \biggl(\frac{1}{2} p(\hat{x}|0) d(0,\hat{x}) + \frac{1}{2} p(\hat{x}|1) d(1,\hat{x})\biggr) \\
+                          &= \frac{1}{2} (p(e|0) + \infty \cdot p(1|0) + p(e|1) + \infty \cdot p(0|1))\numberthis\label{eq:expected-distortion}    \\
+                          &\le D.
+          \end{align*}
+          That implies that \(p(1|0) = p(0|1) = 0\) for the distortion constraint to be satisfied.
+
+          With that in mind, let \(p\in\R : p\in[0,1]\) and define \(p(\hat{x}|x)\) by
+          \begin{gather*}
+            p_{\hat{X}|X}(0|0) = p_{\hat{X}|X}(1|1) = p \\
+            p_{\hat{X}|X}(e|0) = p_{\hat{X}|X}(e|1) = 1 - p
+          \end{gather*}
+          which implies that for \(\hat{x}\in\hat{X}\),
+          \begin{equation*}
+            p_{\hat{X}}(\hat{x}) = \begin{cases}
+              \frac{1}{2}p, &\hat{x} = 0, \\
+              (1-p),        &\hat{x} = e, \\
+              \frac{1}{2}p, &\hat{x} = 1.
+            \end{cases}
+          \end{equation*}
+          Then by Bayes' theorem,
+          \begin{gather*}
+            p_{X|\hat{X}}(0|0) = p_{X|\hat{X}}(1|1) = \frac{\frac{1}{2}p}{\frac{1}{2}p + \frac{1}{2}(0)} = 1 \\
+            p_{X|\hat{X}}(0|e) = p_{X|\hat{X}}(1|e) = \frac{\frac{1}{2}(1-p)}{\frac{1}{2}(1-p) + \frac{1}{2}(1-p)} = \frac{1}{2}.
+          \end{gather*}
+          Therefore,
+          \begin{align*}
+            H(X|\hat{X}) &= \sum_{x\in\X} \sum_{\hat{x}\in\hat{\X}} p(\hat{x}) p(x|\hat{x}) \log p(x|\hat{x})                 \\
+                         &= 0 + \frac{1}{2} (1-p) \log_{2}(\frac{1}{2}) + 0 + 0 + \frac{1}{2} (1-p) \log_{2}(\frac{1}{2}) + 0 \\
+                         &= 1 - p.
+          \end{align*}
+          From~\eqref{eq:expected-distortion} and the definition of \(p_{\hat{X}|X}\), we also have
+          \begin{align*}
+            Ed(X,\hat{X}) = \frac{1}{2}((1-p) + (1-p)) \\
+             &= 1-p                                    \\
+             &\le D
+          \end{align*}
+          which implies that \(H(X|\hat{X}) = 1-p \le D\). Thus,
+          \begin{align*}
+            I(X;\hat{X}) &= H(X) - H(X|\hat{X})                                                               \\
+                         &\ge 1 - D             & &\because \text{\(H(X)=1\) for Bernoulli(\(\frac{1}{2}\)).}
+          \end{align*}
+          Now that we have shown that \(1 - D\) is the minimum achievable mutual information given the distortion constraint, let's show an achievable distribution that makes \(I(X;\hat{X})=1-D\).
+
+          If we set \(p = 1-D\), then the previously defined distribution becomes
+          \begin{equation*}
+            p(\hat{x}|x) = \begin{cases}
+              1 - D, &\hat{x} = x,   \\
+              D,     &\hat{x} = e,   \\
+              0,     &\hat{x} \ne x.
+            \end{cases}
+          \end{equation*}
+          Clearly, the distortion constraint is satisfied,
+          \begin{equation*}
+            Ed(X,\hat{X}) = \frac{1}{2}(D + D) = D
+          \end{equation*}
+          and \(I(X,\hat{X}) = 1 - (1 - p) = 1 - D\). By the nonnegativity and nonincreasing properties of \(R(D)\), we have
+          \begin{equation*}
+            R(D) = \begin{cases}
+              1 - D, &0 \le D \le 1, \\
+              0,     &D \ge 1.
+            \end{cases}
+          \end{equation*}
+        \end{proof}
+      \end{claim}
+    \end{solution}
+  \end{questions}
+\end{document}

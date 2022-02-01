@@ -1,0 +1,60 @@
+% region Filename parsing.
+% Provides macros manipulating strings of tokens.
+\RequirePackage{xstring}
+
+% Store the jobname as a string with category 11 characters.
+\edef\normaljobname{\expandafter\scantokens\expandafter{\jobname\noexpand}}
+\StrBetween{\normaljobname}{hw-}{-q}[\homeworknumber]
+\StrBehind{\normaljobname}{-q-}[\questionnumber]
+% endregion
+
+\documentclass[
+  coursecode={MTHE 477},
+  assignmentname={Homework \homeworknumber},
+  studentnumber=20053722,
+  name={Bryan Hoang},
+  draft,
+  % final,
+]{
+  ltxanswer%
+}
+
+\usepackage{bch-style}
+
+\begin{document}
+  \begin{questions}
+    \setcounter{question}{\questionnumber}
+    \addtocounter{question}{-1}
+    \question[25]{}
+    \begin{solution}
+      From the textbook, the capacity of the \(q\)-ary symmetric DMC is
+      \begin{equation*}
+        C = \log_{2}q + \varepsilon\log_{2}\frac{\varepsilon}{q-1} + (1-\varepsilon)\log_{2}(1-\varepsilon).
+      \end{equation*}
+      With \(\abs{\mathcal{Z}}=q\), the rate distortion function of the \(q\)-ary symmetric DMS is
+      \begin{equation*}
+        R(D) = \begin{cases}
+          \log_{2}q - D\log_{2}(q-1) - H_{b}(D), &\text{if } D \in [0, \frac{q-1}{q}], \\
+          0,                                     &\text{if } D \ge \frac{q-1}{q}.
+        \end{cases}
+      \end{equation*}
+      Then we want to see if the uncoded source-channel transmission scheme can achieve the Shannon limit of the communication system for it to be optiml. That is,
+      \begin{align*}
+        R(D_{SL})                                                &= C                                                                                                        \\
+        \cancel{\log_{2}q} - D_{SL}\log_{2}(q-1) - H_{b}(D_{SL}) &= \cancel{\log_{2}q} + \varepsilon\log_{2}\frac{\varepsilon}{q-1} + (1-\varepsilon)\log_{2}(1-\varepsilon) \\
+        D_{SL}\log_{2}(q-1) + H_{b}(D_{SL})                      &= \varepsilon\log_{2}(q-1) + H_{b}(\varepsilon)
+        \intertext{\because\ \(x\log_{2}(q-1) + H_{b}(x)\) is injective on \(x\in[0, \frac{q-1}{q}]\),}
+        D_{SL}                                                   &= \varepsilon.\numberthis\label{eq:shannon-limit}
+      \end{align*}
+      With that fact, let's see if the distortion constraint is satisfied for the scheme with \(R_{sc}=1\) source symbol/channel use. First, let \(W\) denote the additive noise of the channel (mod \(q\)). Then the expected distortion is
+      \begin{align*}
+        Ed(Z,\hat{Z}) &= P(Z \ne \hat{Z})                                         \\
+                      &= P(W \ne 0)                                               \\
+                      &= 1-(1-\varepsilon)                                        \\
+                      &= \varepsilon                                              \\
+                      &= D_{SL}            & &\text{by~\eqref{eq:shannon-limit}.}
+      \end{align*}
+      Thus, the proposed scheme achieves the Shannon limit of the communication system, and thus \fbox{is optimal} for the communication system.
+    \end{solution}
+  \end{questions}
+\end{document}

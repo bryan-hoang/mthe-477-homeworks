@@ -1,0 +1,104 @@
+% region Filename parsing.
+% Provides macros manipulating strings of tokens.
+\RequirePackage{xstring}
+
+% Store the jobname as a string with category 11 characters.
+\edef\normaljobname{\expandafter\scantokens\expandafter{\jobname\noexpand}}
+\StrBetween{\normaljobname}{hw-}{-q}[\homeworknumber]
+\StrBehind{\normaljobname}{-q-}[\questionnumber]
+% endregion
+
+\documentclass[
+  coursecode={MTHE 477},
+  assignmentname={Homework \homeworknumber},
+  studentnumber=20053722,
+  name={Bryan Hoang},
+  draft,
+  % final,
+]{
+  ltxanswer%
+}
+
+\usepackage{bch-style}
+
+\begin{document}
+  \begin{questions}
+    \setcounter{question}{\questionnumber}
+    \addtocounter{question}{-1}
+    \question[25]\
+    \begin{parts}
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          Let's start on the LHS.
+          \begin{align*}
+            R(0) &= \min_{p(\hat{x}|x) : Ed(X,\hat{X}) \le 0} I(X;\hat{X})                                         & &\text{by definition of \(R(D)\)} \\
+                 &= \min_{p(\hat{x}|x) : Ed(X,\hat{X}) \le 0} (\H{X} - \H{X|\hat{X}}).\numberthis\label{eq:a-r(0)}
+          \end{align*}
+          \begin{claim}
+            \(\forall p(\hat{x} | x) : Ed(X, \hat{X}) \le 0,\ \H{X|\hat{X}} = 0\)
+          \end{claim}
+          \begin{proof}
+            \(\forall p(\hat{x} | x)\),
+            \begin{align*}
+              Ed(X, \hat{X})                                                         &\le 0                                            \\
+              \sum_{x\in\X}\sum_{\hat{x}\in\hat{\X}} \p{x} p(\hat{x}|x) d(x,\hat{x}) &\le 0                                            \\
+              \Rightarrow d(x,\hat{x})                                               &= 0       & &\forall x\in\X,\ \hat{x}\in\hat{\X} \\
+              \Rightarrow x                                                          &= \hat{x} & &\forall x\in\X,\ \hat{x}\in\hat{\X} \\
+              \Rightarrow H(X|\hat{X})                                               &= 0
+            \end{align*}
+          \end{proof}
+          With the claim,~\eqref{eq:a-r(0)} becomes
+          \begin{align*}
+            R(0) &= \min_{p(\hat{x}|x) : Ed(X,\hat{X}) \le 0} H(X) \\
+                 &= H(X).
+          \end{align*}
+          since \(H(X)\) doesn't depend on \(p(\hat{x}|x)\).
+        \end{proof}
+      \end{solution}
+
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          By the non-increasing property of \(R(D)\), it is sufficient to show that \(R(D^{*}) = 0\) to prove the result. First, let \(\hat{x}^{*}\in\hat{X}\) be the element that achieve \(D^{*}\). Then let
+          \begin{equation}\label{eq:b-conditional-pmf}
+            p(\hat{x}|x) = \begin{cases}
+              1, &\hat{x} = \hat{x}^{*} \\
+              0, &\text{otherwise.}
+            \end{cases}
+          \end{equation}
+          It follows that
+          \begin{align*}
+            Ed(X,\hat{X}) &= \sum_{x\in\X}\sum_{\hat{x}\in\hat{\X}} \p{x} p(\hat{x}|x) d(x,\hat{x}) \\
+                          &= \sum_{x\in\X} \p{x} d(x,\hat{x}^{*})                                   \\
+                          &= Ed(X,\hat{x}^{*})                                                      \\
+                          &= D^{*}
+          \end{align*}
+          which satisfies the constraint for minimizing \(I(X;\hat{X})\). By~\eqref{eq:b-conditional-pmf}, we also have that \(X\independent\hat{X}\) which means that \(I(X;\hat{X}) = 0\). By the nonnegativity of mutual information,
+          \begin{align*}
+            R(D^{*}) &= \min_{p(\hat{x}|x) : Ed(X,\hat{X}) \le D^{*}} I(X;\hat{X}) \\
+                     &= 0.
+          \end{align*}
+          \therefore\ \(\forall D \ge D^{*},\ R(D^{*}) = 0\).
+        \end{proof}
+      \end{solution}
+
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          (by contradiction)
+
+          Suppose that for \(0 \le D \le D^{*},\ R(D) = 0\). Then \(\exists p(\hat{x}|x) : Ed(X,\hat{X}) \le D\) and that \(I(X;\hat{X}) = 0\), which implies that \(X \independent \hat{X}\). But we also have that
+          \begin{align*}
+            Ed(X,\hat{X}) &= \sum_{x\in\X} \sum_{\hat{x}\in\hat{\X}} \p{x} p(\hat{x}|x) d(x,\hat{x})                                          \\
+                          &= \sum_{\hat{x}\in\hat{\X}} p(\hat{x}) \sum_{x\in\X} \p{x} d(x,\hat{x})   & &\because X \independent \hat{X}       \\
+                          &= \sum_{\hat{x}\in\hat{\X}} p(\hat{x}) Ed(X,\hat{x})                                                               \\
+                          &\ge \biggl(\sum_{\hat{x}\in\hat{\X}} p(\hat{x})\biggr) D^{*}              & &\text{by the definition of \(D^{*}\)} \\
+                          &= D^{*}
+          \end{align*}
+          So we have \(Ed(X,\hat{X}) \ge D^{*}\), but that contradicts the assumption of \(Ed(X,\hat{X}) \le D \le D^{*}\), leading to a contradiction. Therefore, for \(0 \le D \le D^{*},\ R(D) > 0\).
+        \end{proof}
+      \end{solution}
+    \end{parts}
+  \end{questions}
+\end{document}
