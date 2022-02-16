@@ -1,0 +1,86 @@
+% region Filename parsing.
+% Provides macros manipulating strings of tokens.
+\RequirePackage{xstring}
+
+% Store the jobname as a string with category 11 characters.
+\edef\normaljobname{\expandafter\scantokens\expandafter{\jobname\noexpand}}
+\StrBetween{\normaljobname}{hw-}{-q}[\homeworknumber]
+\StrBehind{\normaljobname}{-q-}[\questionnumber]
+% endregion
+
+\documentclass[
+  coursecode={MTHE 477},
+  assignmentname={Homework \homeworknumber},
+  studentnumber=20053722,
+  name={Bryan Hoang},
+  draft,
+  % final,
+]{
+  ltxanswer%
+}
+
+\usepackage{bch-style}
+
+\begin{document}
+  \begin{questions}
+    \setcounter{question}{\questionnumber}
+    \addtocounter{question}{-1}
+    \question[20]\
+    \begin{parts}
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          Define
+          \begin{equation*}
+            c = \biggl(\sum_{x^{n}\in\X^{n}} 2^{-l(x^{n})}\biggr)^{-1}.
+          \end{equation*}
+          Then \(q(x^{n}) = c2^{-l(x^{n})}\) is a valid pmf on \(\X^{n}\) and since \(c \ge 1\) by Kraft's inequality,
+          \begin{equation}\label{eq:a-inequality}
+            l(x^{n}) \ge -\log q(x^{n}).
+          \end{equation}
+          Then the corresponding Shannon-Fano code has codeword lengths \(l_{q}(x^{n}) = \lceil -\log q(x^{n}) \rceil\).
+
+          Thus,
+          \begin{align*}
+            \frac{1}{n} E[l_{q}(X^{n})] &= \frac{1}{n} \sum_{x^{n}\in\X^{n}} p(x^{n}) \lceil -\log q(x^{n}) \rceil                                      \\
+                                        &\le \frac{1}{n} \sum_{x^{n}\in\X^{n}} p(x^{n}) (-\log q(x^{n}) + 1)                                            \\
+                                        &\le \frac{1}{n} \sum_{x^{n}\in\X^{n}} p(x^{n}) l(x^{n}) + \frac{1}{n}     & &\text{by~\eqref{eq:a-inequality}} \\
+                                        &= \frac{1}{n} E[l(X^{n})] + \frac{1}{n}.
+          \end{align*}
+        \end{proof}
+      \end{solution}
+
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          \begin{proofpart}
+            \((\Rightarrow)\)
+
+            Assume that there exists a sequence \(\{C_{n}\}\) of prefix codes \(C_{n}:\X^{n} \to \{0,1\}^{*}\) which is universal with respect to \(\mathcal{P}\). Then \(\forall p \in \mathcal{P}\),
+            \begin{equation*}
+              \lim_{n\to\infty} R(C_{n},p) = 0.
+            \end{equation*}
+            By part~(\ref{part@3@1}), \(\exists q \in \mathcal{P} : \frac{1}{n} E[l_{q}(X^{n})] \le \frac{1}{n} E[l(X^{n})] + \frac{1}{n}\), where \(l(X^{n}) = \abs{C_{n}}\).
+
+            Thus, \(\lim_{n\to\infty} R(S_{n},p) = 0\) for some sequence \(\{S_{n}\}\) of Shannon-Fano codes, which means that \(\{S_{n}\}\) is universal with respect to \(\mathcal{P}\).
+
+            Therefore, by Corollary 6 on slide 49, we have that \(\forall p \in \mathcal{P}\),
+            \begin{equation*}
+              \lim_{n\to\infty} \frac{1}{n}D(p||q_{n}) = 0.
+            \end{equation*}
+          \end{proofpart}
+
+          \begin{proofpart}
+            (\(\Leftarrow\))
+
+            Assume that \(\exists \{q_{n}\}\) a sequence of probability distributions such that \(\forall p \in \mathcal{P}\),
+            \begin{equation*}
+              \lim_{n\to\infty} \frac{1}{n}D(p||q_{n}) = 0.
+            \end{equation*}
+            Then by Corollary 6 on slide 49, we can get a sequence of Shannon-Fano codes \(\{C_{n}\}\) obtained from \(\{q_{n}\}\) which is universal with respect to \(\mathcal{P}\). Since Shannon-Fano codes are also prefix codes, the proof is complete.
+          \end{proofpart}
+        \end{proof}
+      \end{solution}
+    \end{parts}
+  \end{questions}
+\end{document}

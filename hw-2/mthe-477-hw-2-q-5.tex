@@ -1,0 +1,72 @@
+% region Filename parsing.
+% Provides macros manipulating strings of tokens.
+\RequirePackage{xstring}
+
+% Store the jobname as a string with category 11 characters.
+\edef\normaljobname{\expandafter\scantokens\expandafter{\jobname\noexpand}}
+\StrBetween{\normaljobname}{hw-}{-q}[\homeworknumber]
+\StrBehind{\normaljobname}{-q-}[\questionnumber]
+% endregion
+
+\documentclass[
+  coursecode={MTHE 477},
+  assignmentname={Homework \homeworknumber},
+  studentnumber=20053722,
+  name={Bryan Hoang},
+  draft,
+  % final,
+]{
+  ltxanswer%
+}
+
+\usepackage{bch-style}
+
+\begin{document}
+  \begin{questions}
+    \setcounter{question}{\questionnumber}
+    \addtocounter{question}{-1}
+    \question[20]\
+    \begin{parts}
+      \part{}
+      \begin{solution}
+        The LZ78 parsing of the sequence \(x^{n}=11111111\ldots1\) is
+        \begin{equation*}
+          \boxed{1,11,111,1111,\dotsc,\underbrace{1\ldots1}_{l_{n}}},
+        \end{equation*}
+        where the length of the last phrase, \(l_{n}\), is
+        \begin{equation*}
+          l_{n} = \begin{cases}
+            T_{n}                 &\text{if \(n\) is a triangular number,} \\
+            \lfloor T_{n} \rfloor &\text{otherwise,}
+          \end{cases}
+        \end{equation*}
+        and where
+        \begin{equation*}
+          T_{n} = \frac{\sqrt{8n + 1} - 1}{2},
+        \end{equation*}
+        is the triangular root of \(n\).
+      \end{solution}
+
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          We know that
+          \begin{equation*}
+            l(x^{n}) = c(x^{n}) (\log c(x^{n}) + O(1)),
+          \end{equation*}
+          where \(c(x^{n})\) denotes the number of phrases in the dictionary obtained by parsing \(x^{n}\). In this case, \(c(x^{n})=T_{n}\) from part~(\ref{part@5@1}). We also know that
+          \begin{equation}\label{eq:triangular-number-upper-bound}
+            T_{n} = \frac{\sqrt{8n + 1} - 1}{2} \le \sqrt{2n}.
+          \end{equation}
+          Therefore,
+          \begin{align*}
+            \lim_{n\to\infty} \frac{1}{n} l(x^{n}) &= \lim_{n\to\infty} \frac{1}{n} T_{n} (\log T_{n} + O(1))                                                                   \\
+                                                   &\le \lim_{n\to\infty} \frac{1}{n} \sqrt{2n} (\log \sqrt{2n} + O(1))   & &\text{by~\eqref{eq:triangular-number-upper-bound}} \\
+                                                   &= \lim_{n\to\infty} \frac{\sqrt{2} (\log \sqrt{2n} + O(1))}{\sqrt{n}}                                                       \\
+                                                   &= 0.
+          \end{align*}
+        \end{proof}
+      \end{solution}
+    \end{parts}
+  \end{questions}
+\end{document}

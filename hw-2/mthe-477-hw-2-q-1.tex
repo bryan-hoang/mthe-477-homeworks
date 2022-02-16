@@ -25,9 +25,37 @@
   \begin{questions}
     \setcounter{question}{\questionnumber}
     \addtocounter{question}{-1}
-    \question[0]{}
-    \begin{solution}
-      42.
-    \end{solution}
+    \question[20]\
+    \begin{parts}
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          We have
+          \begin{gather*}
+            2^{-l(j)} \le p(j) < 2^{-l(j) + 1} \\
+            \Rightarrow -l(j) \le \log_{2} p(j) < -l(j) + 1 \\
+            \Rightarrow l(j) \ge -\log_{2} p(j) > l(j) - 1.
+          \end{gather*}
+          Thus, \(l(j)\) is the lowest integer that is greater than or equal to \(-\log_{2} p(j)\). Therefore, we can conclude that \(l(j) = \lceil -\log_{2} p(j) \rceil\), so the expected code length satisfies \(L(C) \le H(X) + 1\).
+        \end{proof}
+      \end{solution}
+
+      \part{}
+      \begin{solution}
+        \begin{proof}
+          Let's prove the result by contradiction. First, suppose that \(C\) is not a prefix code. That is, let \(i,j\in\X:i<j\) and assume that \(C(i)\) is a prefix of \(C(j)\), i.e., \(C(i)\) appears in the first \(l(i)\) bits of \(C(j)\). Then \(\hat{F}(i)\) and \(\hat{F}(j)\) also share the first \(l(i)\) bits. Thus, we have
+          \begin{equation}\label{eq:lt}
+            \hat{F}(j) - \hat{F}(i) < 2^{-l(i)}.
+          \end{equation}
+          But we also have
+          \begin{align*}
+            \hat{F}(j) - \hat{F}(i) &= \sum_{k=i}^{j-1} p(k) & &\text{by the definition of \(\hat{F}(j)\)}                    \\
+                                    &\ge p(i)                                                                                 \\
+                                    &\ge 2^{-l(i)}           & &\text{by the definition of \(l(i)\)}\numberthis\label{eq:ge}.
+          \end{align*}
+          With~\eqref{eq:lt} and~\eqref{eq:ge}, we have a contradiction. Therefore, \(C\) is a prefix code.
+        \end{proof}
+      \end{solution}
+    \end{parts}
   \end{questions}
 \end{document}

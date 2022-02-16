@@ -1,0 +1,43 @@
+% region Filename parsing.
+% Provides macros manipulating strings of tokens.
+\RequirePackage{xstring}
+
+% Store the jobname as a string with category 11 characters.
+\edef\normaljobname{\expandafter\scantokens\expandafter{\jobname\noexpand}}
+\StrBetween{\normaljobname}{hw-}{-q}[\homeworknumber]
+\StrBehind{\normaljobname}{-q-}[\questionnumber]
+% endregion
+
+\documentclass[
+  coursecode={MTHE 477},
+  assignmentname={Homework \homeworknumber},
+  studentnumber=20053722,
+  name={Bryan Hoang},
+  draft,
+  % final,
+]{
+  ltxanswer%
+}
+
+\usepackage{bch-style}
+
+\begin{document}
+  \begin{questions}
+    \setcounter{question}{\questionnumber}
+    \addtocounter{question}{-1}
+    \question[20]{}
+    \begin{solution}
+      \begin{proof}
+        Suppose that \(C_{n}\) is the Shannon-Fano code for \(p(x^{n})\). Then for \(i = 1, \dotsc, M\),
+        \begin{align*}
+          \lim_{n\to\infty} \frac{1}{n} D(p_{i}||p) &= \lim_{n\to\infty} \frac{1}{n} \sum_{x^{n}\in\X^{n}} p_{i}(x^{n}) \log \frac{p_{i}(x^{n})}{p(x^{n})}                                                                                         \\
+                                                    &= \lim_{n\to\infty} \frac{1}{n} \sum_{x^{n}\in\X^{n}} p_{i}(x^{n}) \log \frac{p_{i}(x^{n})}{\sum_{j=1}^{M} \alpha_{j} p_{j}(x^{n})}                                                           \\
+                                                    &\le \lim_{n\to\infty} \frac{1}{n} \sum_{x^{n}\in\X^{n}} p_{i}(x^{n}) \log \frac{p_{i}(x^{n})}{\alpha_{i} p_{i}(x^{n})}                                                                        \\
+                                                    &= \lim_{n\to\infty} \frac{1}{n} (-\log \alpha_{i})                                                                                                                                            \\
+                                                    &= 0                                                                                                                                 & &\because \alpha_{i} > 0\quad \forall i = 1, \dotsc, M.
+        \end{align*}
+        Thus, the code sequence \(\{C_{n}\}\) is universal with respect to \(\mathcal{P}\).
+      \end{proof}
+    \end{solution}
+  \end{questions}
+\end{document}
