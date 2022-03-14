@@ -6,7 +6,7 @@
 \edef\normaljobname{\expandafter\scantokens\expandafter{\jobname\noexpand}}
 \StrBetween{\normaljobname}{hw-}{-q}[\homeworknumber]
 \StrBehind{\normaljobname}{-q-}[\questionnumber]
-% endregion Filename parsing.
+% endregion
 
 \documentclass[
   coursecode={MTHE 477},
@@ -15,6 +15,7 @@
   name={Bryan Hoang},
   draft,
   % final,
+  date=2022-03-07,
 ]{
   ltxanswer%
 }
@@ -25,9 +26,10 @@
   \begin{questions}
     \setcounter{question}{\questionnumber}
     \addtocounter{question}{-1}
-    \question[0]{}
+    \question[20]{}
     \begin{solution}
-      42.
+      \begin{proof}
+      \end{proof}
     \end{solution}
   \end{questions}
 \end{document}
