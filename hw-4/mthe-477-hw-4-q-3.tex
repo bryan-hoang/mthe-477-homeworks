@@ -29,12 +29,56 @@
     \begin{parts}
       \part{}
       \begin{solution}
-        42.
+        For the first-order linear predictor of Coder 1, let \(a\) be the prediction coefficient to be determined. Then the orthogonality principle states that
+        \begin{align*}
+          \E{(X_{n} - a X_{n - 1}) X_{n - 1}}       &= 0                                                                                                         \\
+          \E{X_{n} X_{n - 1}} - a \E{X_{n - 1}^{2}} &= 0                                                                                                         \\
+          a                                         &= \frac{\E{X_{n} X_{n - 1}}}{\E{X_{n - 1}^{2}}}                                                             \\
+                                                    &= \frac{r_{1}}{r_{0}}                           & &\text{\(\because\ \{X_{n}\}\)  is wide sense stationary} \\
+          \alignedbox{                              &= \frac{1}{2}}.
+        \end{align*}
+        For the second-order linear predictor of Coder 2, let \(a_{1}\) and \(a_{2}\) be the prediction coefficients to be determined. Then the orthogonality principle states that
+        \begin{equation*}
+          \E{(X_{n} - a_{1} X_{n - 1} - a_{2} X_{n - 2}) X_{n - i}} = 0 \qquad \text{for \(i = 1, 2\)}
+        \end{equation*}
+        which gives the following system of linear equations:
+        \begin{align*}
+                                   &\begin{cases}
+                                      a_{1} r_{0} + a_{2} r_{1} = r_{1}, \\
+                                      a_{1} r_{1} + a_{2} r_{0} = r_{2}
+                                    \end{cases} \\
+          \Rightarrow              &\begin{cases}
+                                      a_{1} \cdot 4 + a_{2} \cdot 2 = 2, \\
+                                      a_{1} \cdot 2 + a_{2} \cdot 4 = 1
+                                    \end{cases} \\
+          \Rightarrow \alignedbox{ &\begin{cases}
+                                        a_{1} = \frac{1}{2}, \\
+                                        a_{2} = 0
+                                      \end{cases}}.
+        \end{align*}
       \end{solution}
 
       \part{}
       \begin{solution}
-        42.=
+        Let \(\Delta_{i}\) denote the step size, \(N_{i}\) denote the quantization level, and \(Q_{i}\) denote the uniform quantizer of Coder \(i\). Then since \(\delta_{i} = \frac{2B}{N_{i}}\), we get
+        \begin{align*}
+          \E*{(e_{n} - Q_{i}(e_{n}))^{2}} &\approx \frac{\Delta_{i}^{2}}{12}              & &\text{\(\because\) the overload distortion is negligible and the prediction error is uniform} \\
+                                          &= \frac{\bigl(\frac{2 B}{N_{i}}\bigr)^{2}}{12}                                                                                                  \\
+                                          &= \frac{B^{2}}{3 N_{i}^{2}}.                                                                                                                    \\
+        \end{align*}
+        Then overall system gain for Coder \(i\) (System SNR, not in dB) is given by
+        \begin{align*}
+          G^{i} &= G_{clp}^{i} G_{Q_{i}}                                                                      \\
+                &\approx G_{olp}^{i} G_{Q_{i}}                                                                \\
+                &\approx \frac{r_{0}}{r_{0} - r_{1} a_{1}} \cdot \frac{\sigma^{2}}{\frac{B^{2}}{3 N_{i}^{2}}} \\
+                &= \frac{r_{0}}{r_{0} - r_{1} a_{1}} \cdot \frac{3 N_{i}^{2} \sigma^{2}}{B^{2}}.
+        \end{align*}
+        Therefore, the approximate SNR improvement is
+        \begin{align*}
+          10 \log_{10} \frac{G^{2}}{G^{1}} &= 10 \log_{10} \frac{N_{2}^{2}}{N_{1}^{2}} \\
+                                           &= 10 \log_{10} \frac{256^{2}}{64^{2}}      \\
+          \alignedbox{                     &\approx \qty{12}{\decibel}}.
+        \end{align*}
       \end{solution}
     \end{parts}
   \end{questions}

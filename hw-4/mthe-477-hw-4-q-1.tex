@@ -28,7 +28,27 @@
     \question[20]{}
     \begin{solution}
       \begin{proof}
-        42.
+        Starting with the LHS of the equality yields
+        \begin{equation*}
+          \E{(Y-\hat{Y})^2} = \E{Y^2} - 2\E{Y\hat{Y}} + \E{\hat{Y}^2}
+        \end{equation*}
+        by the linearity of expectation. To try to use the orthogonality principle, let's try rewriting the middle term, \(2\E{Y\hat{Y}}\), as
+        \begin{align*}
+          2\E{Y\hat{Y}} &= 2\E*{(Y - \hat{Y} + \hat{Y})\hat{Y}}                                                \\
+                        &= 2\Bigl(\E*{(Y - \hat{Y})\hat{Y}} + \E{\hat{Y}^{2}}\Bigr)                            \\
+                        &= 2\Biggl(\E[\bigg]{(Y - \hat{Y})\sum_{i=1}^{m} a_{i} X_{i}} + \E{\hat{Y}^{2}}\Biggr) \\
+                        &= 2\Biggl(\sum_{i=1}^{m} a_{i} \E[\big]{(Y - \hat{Y})X_{i}} + \E{\hat{Y}^{2}}\Biggr)
+        \end{align*}
+        Since \(\hat{Y}\) is an optimal linear predictor, then the orthogonality principle says that
+        \begin{align*}
+          \E*{(Y - \hat{Y})X_{i}}               &= 0 \quad \forall i = 1, \dotsc, m \\
+          \Rightarrow \E*{(Y - \hat{Y})\hat{Y}} &= 0.
+        \end{align*}
+        Therefore, we have that
+        \begin{align*}
+          \E*{(Y-\hat{Y})^2} &= \E{Y^2} - 2\E{\hat{Y}^{2}} + \E{\hat{Y}^{2}} \\
+                             &= \E{Y^2} - \E{\hat{Y}^{2}}.
+        \end{align*}
       \end{proof}
     \end{solution}
   \end{questions}

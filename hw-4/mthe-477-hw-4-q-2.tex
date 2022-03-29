@@ -30,21 +30,59 @@
       \part{}
       \begin{solution}
         \begin{proof}
-          42.
+          Let be interpreted as\(\hat{Y} = aX + b\) a linear predictor of \(Y\) from the random variables \(X = X_{1}\) and \(X_{0} = 1\) with prediction coefficients \(a\) and \(b\). Then, the orthogonality principle states that the linear predictor is optimal in the MSE sense when for \(i = 0, 1\),
+          \begin{align*}
+            \E*{(Y - \hat{Y}) X_{i}}                                                                                           &= 0 \\
+            \E*{\bigl(Y - (aX + b)\bigr) X_{i}}                                                                                &= 0 \\
+            \E*{\biggl(Y - \Bigl(\frac{\Cov(X, Y)}{\Var(X)} X + \E{Y} - \frac{\Cov(X, Y)}{\Var(X)} \E{X}\Bigr)\biggr) X_{i}}   &= 0 \\
+            \E{Y X_{i}} - \E{Y} \E{X_{i}} - \frac{\Cov(X, Y)}{\Var(X)} \E{X X_{i}} + \frac{\Cov(X, Y)}{\Var(X)} \E{X}\E{X_{i}} &= 0
+          \end{align*}
+          For \(i = 0\),
+          \begin{align*}
+             &\phantomeq{} \E{Y X_{i}} - \E{Y} \E{X_{i}} - \frac{\Cov(X, Y)}{\Var(X)} \E{X X_{i}} + \frac{\Cov(X, Y)}{\Var(X)} \E{X}\E{X_{i}} \\
+             &= \E{Y} - \E{Y} \E{1} - \frac{\Cov(X, Y)}{\Var(X)} \E*{X} + \frac{\Cov(X, Y)}{\Var(X)} \E{X}\E{1}                               \\
+             &= \E{Y} - \E{Y} - \frac{\Cov(X, Y)}{\Var(X)} \E{X} + \frac{\Cov(X, Y)}{\Var(X)} \E{X}                                           \\
+             &= 0.
+          \end{align*}
+          For \(i = 1\),
+          \begin{align*}
+             &\phantomeq{} \E{Y X_{i}} - \E{Y} \E{X_{i}} - \frac{\Cov(X, Y)}{\Var(X)} \E{X X_{i}} + \frac{\Cov(X, Y)}{\Var(X)} \E{X}\E{X_{i}} \\
+             &= \E{Y X} - \E{Y} \E{X} - \frac{\Cov(X, Y)}{\Var(X)} \E{X^{2}} + \frac{\Cov(X, Y)}{\Var(X)} \E{X}^{2}                           \\
+             &= \Cov(X, Y) - \frac{\Cov(X, Y)}{\Var(X)} \bigl(\E{X^{2}} - \E{X}^{2}\bigr)                                                     \\
+             &= \Cov(X, Y) - \frac{\Cov(X, Y)}{\Var(X)} \Var(X)                                                                               \\
+             &= 0.
+          \end{align*}
+          Therefore, the orthogonality principle implies that the choices for \(a\) and \(b\) are optimal.
         \end{proof}
       \end{solution}
 
       \part{}
       \begin{solution}
         \begin{proof}
-          42.
+          \begin{align*}
+            \hat{Y} &= a X + b                                                                                           \\
+                    &= \frac{\Cov(X, Y)}{\Var(X)} X + \E{Y} - \frac{\Cov(X, Y)}{\Var(X)} \E{X}                           \\
+                    &= \E{Y} + \frac{\Cov(X, Y)}{\Var(X)} \bigl(X - \E{X}\bigr)                                          \\
+                    &= \E{Y} + \frac{\Cov(X, Y) \sqrt{\Var(Y)}}{\sqrt{\Var(X)}^{2} \sqrt{\Var(Y)}} \bigl(X - \E{X}\bigr) \\
+                    &= m_{Y} + \frac{\rho \sigma_{Y}}{\sigma_{X}} (X - m_{X}),
+          \end{align*}
+          which is what we wanted to prove.
         \end{proof}
       \end{solution}
 
       \part{}
       \begin{solution}
         \begin{proof}
-          42.
+          \begin{align*}
+             &\phantomeq{} \E[\big]{\bigl(Y - (a X + b)\bigr)^{2}}                                                                                                                                                                                                                                                                                 \\
+             &= \E[\big]{\bigl(Y - (\hat{Y})\bigr)^{2}}                                                                                                                                                                                                                                                                                            \\
+             &= \E{Y^{2}} - \E{(\hat{Y})^{2}}                                                                                                                                                                                                                                          & &\text{by question 1 \(\because\) \(\hat{Y}\) is optimal} \\
+             &= \E{Y^{2}} - \E*{\bigl(m_{Y} + \frac{\rho \sigma_{Y}}{\sigma_{X}} (X - m_{X})\bigr)^{2}}                                                                                                                                                                                & &\text{by part~(\ref{part@2@2})}                          \\
+             &= \E{Y^{2}} - \E{m_{Y}} - 2 \E*{m_{Y} \frac{\rho \sigma_{Y}}{\sigma_{X}} (X - m_{X})} - \E*{\frac{\rho^{2} \sigma_{Y}^{2}}{\sigma_{X}^{2}} (X - m_{X})^{2}}                                                                                                                                                                          \\
+             &= \underbrace{\E{Y^{2}} - m_{Y}}_{\Var(Y) = \sigma_{Y}^{2}} - 2 m_{Y} \frac{\rho \sigma_{Y}}{\sigma_{X}} (\underbrace{\E*{X} - m_{X}}_{m_{X} - m_{X} = 0}) - \frac{\rho^{2} \sigma_{Y}^{2}}{\sigma_{X}^{2}} \underbrace{\E*{(X - m_{X})^{2}}}_{\Var(X) = \sigma_{X}^{2}}                                                             \\
+             &= \sigma_{Y}^{2} - \rho^{2} \sigma_{Y}^{2}                                                                                                                                                                                                                                                                                           \\
+             &= \sigma_{Y}^{2} (1 - \rho^{2}).
+          \end{align*}
         \end{proof}
       \end{solution}
     \end{parts}

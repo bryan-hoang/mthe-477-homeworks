@@ -25,22 +25,80 @@
   \begin{questions}
     \setcounter{question}{\questionnumber}
     \addtocounter{question}{-1}
-    \question[25]\
+    \question[30]\
     \begin{parts}
       \part{}
       \begin{solution}
-        42.
+        From (ii) and (iii), we get
+        \begin{align*}
+          r_{i}                                    &= H(Q_{\Delta_{i}}(Y_{i}))                                 \\
+                                                   &= h(Y_{i}) - \log_{2} \Delta_{i}                           \\
+          \Rightarrow \Delta_{i}                   &= 2^{h(Y_{i}) - r_{i}}\numberthis\label{eq:bit-allocation} \\
+          \rightarrow \text{(i)} \Rightarrow D_{i} &= \frac{1}{12} 2^{2 h(Y_{i})} 2^{-2 r_{i}}.
+        \end{align*}
+        Therefore, the optimization problem is a CMP to minimize
+        \begin{equation}\label{eq:min-distortion}
+          D(\mathbf{r}) \triangleq \sum_{i=1}^{k} D_{i} = \frac{1}{12} \sum_{i=1}^{k} 2^{2 h(Y_{i})} 2^{-2 r_{i}}
+        \end{equation}
+        subject to \(\sum_{i=1}^{k} r_{i} \le R\). Since \(D_{i}\) is strictly decreasing in \(r_{i}\), it follows that \(\sum_{i=1}^{k} r_{i} = R\) for the optimal \(\mathbf{r} = (r_{1}, \dotsc, r_{k})\).
+
+        To use the Lagrange multiplier method, let
+        \begin{align*}
+          f(\mathbf{r})          &\triangleq D(\mathbf{r}) = \frac{1}{12} \sum_{i=1}^{k} 2^{2 h(Y_{i})} 2^{-2 r_{i}}, \\
+          g(\mathbf{r})          &\triangleq \sum_{i=1}^{k} r_{i} - R,                                                \\
+          J(\mathbf{r}, \lambda) &\triangleq f(\mathbf{r}) + \lambda g(\mathbf{r}).
+        \end{align*}
+        Then solving
+        \begin{equation*}
+          \diffp*{J(\mathbf{r}, \lambda)}{r_{j}} = \frac{1}{12} 2^{2 h(Y_{i})} (-2 \ln 2) 2^{-2 r_{i}} + \lambda = 0
+        \end{equation*}
+        yields
+        \begin{equation*}
+          r_{i} = h(Y_{i}) + \underbrace{\log_{2} \frac{\ln 2}{12 \lambda}}_{\hat{\lambda}}.
+        \end{equation*}
+        From the constraint \(\sum_{j=1}^{k} r_{j} = R\), \(\hat{\lambda}\) must satisfy
+        \begin{align*}
+          R                         &= \sum_{j=1}^{k} h(Y_{j}) + k \hat{\lambda}          \\
+          \Rightarrow \hat{\lambda} &= \frac{R}{k} - \frac{1}{k} \sum_{j=1}^{k} h(Y_{j}).
+        \end{align*}
+        Substituting into
+        \begin{equation*}
+          r_{i} = h(Y_{i}) + \hat{\lambda}s
+        \end{equation*}
+        yields
+        \begin{equation}\label{eq:code-length}
+          r_{i} = h(Y_{i}) + \frac{R}{k} - \frac{1}{k} \sum_{j=1}^{k} h(Y_{j}).
+        \end{equation}
+        Then by~\eqref{eq:bit-allocation} we get that \(\forall i = 1, \dotsc, k\),
+        \begin{equation*}
+          \boxed{\Delta_{i} = 2^{-\frac{R}{k} + \frac{1}{k} \sum_{j=1}^{k} h(Y_{j})}}.
+        \end{equation*}
+        Hence, substituting~\eqref{eq:code-length} into~\eqref{eq:min-distortion} gives the the minimum total distortion as
+        \begin{align*}
+          D(\mathbf{r}) &= \frac{1}{12} \sum_{i=1}^{k} 2^{2 h(Y_{i})} 2^{-2\bigl(\frac{R}{k} + h(Y_{i}) - \frac{1}{k} \sum_{j=1}^{k} h(Y_{j})\bigr)} \\
+          \alignedbox{  &= \frac{k}{12} 2^{\frac{2}{k} \sum_{j=1}^{k} h(Y_{j})} 2^{-\bigl(\frac{R}{k}\bigr)}}.
+        \end{align*}
+        The above minimum distortion is the same as if \(k\) copies of a random variable with differential entropy \(\frac{1}{k} \sum_{j=1}^{k} h(Y_{j})\) were quantized using the uniform rate allocation \(r_{i} = \frac{R}{k}\).
       \end{solution}
 
       \part{}
       \begin{solution}
-        42.
+        Since we have that \(\forall i = 1, \dotsc, k\), \(Y_{i} \sim N(\mu, \sigma_{i}^{2})\), it follows that
+        \begin{align*}
+          h(Y_{i})                                        &= \frac{1}{2} \log_{2}(2\pi e \sigma_{i}^{2})                                                                                  \\
+          \Rightarrow \frac{1}{k} \sum_{j=1}^{k} h(Y_{j}) &= \frac{1}{k} \sum_{j=1}^{k} \frac{1}{2} \log_{2}(2\pi e \sigma_{i}^{2})                                                       \\
+                                                          &= \frac{1}{2} \log_{2}(2\pi e) + \frac{1}{2} \log_{2}\Biggl(\Biggl(\prod_{j=1}^{k} \sigma_{j}^{2}\Biggr)^{\frac{1}{k}}\Biggr).
+        \end{align*}
+        Then by part~(\ref{part@4@1}),
+        \begin{align*}
+          D(\mathbf{r}) &= \frac{k}{12} 2^{\frac{2}{k} \sum_{j=1}^{k} h(Y_{j})} 2^{-\bigl(\frac{R}{k}\bigr)}                             \\
+          \alignedbox{  &= \frac{k \pi e}{6} \Biggl(\prod_{j=1}^{k} \sigma_{j}^{2}\Biggr)^{\frac{1}{k}} 2^{-2 \bigl(\frac{R}{k}\bigr)}}.
+        \end{align*}
       \end{solution}
 
       \part{}
       \begin{solution}
         \begin{proof}
-          42.
         \end{proof}
       \end{solution}
     \end{parts}
